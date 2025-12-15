@@ -5,9 +5,6 @@
   <title>SSHomelab Browser</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Google Programmable Search -->
-  <script async src="https://cse.google.com/cse.js?cx=c4922d316dfe64190"></script>
-
   <style>
     :root {
       color-scheme: dark;
@@ -33,35 +30,13 @@
       color: var(--text);
     }
 
-    .wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 32px 16px;
-    }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 32px 16px; }
 
-    .header {
-      display:flex;
-      align-items:center;
-      gap:14px;
-      margin-bottom:20px;
-    }
+    .header { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+    .logo { width:44px; height:44px; border-radius:14px; background: linear-gradient(135deg,#6ec4ff,#c46eff); }
 
-    .logo {
-      width:44px;
-      height:44px;
-      border-radius:14px;
-      background: linear-gradient(135deg,#6ec4ff,#c46eff);
-    }
-
-    h1 {
-      margin:0;
-      font-size:20px;
-    }
-
-    .sub {
-      font-size:13px;
-      color:var(--muted);
-    }
+    h1 { margin:0; font-size:20px; }
+    .sub { font-size:13px; color:var(--muted); }
 
     .shell {
       border:1px solid var(--line);
@@ -70,20 +45,9 @@
       background: var(--panel);
     }
 
-    .content {
-      display:grid;
-      grid-template-columns: 360px 1fr;
-      min-height:600px;
-    }
-
-    .left, .right {
-      padding:16px;
-    }
-
-    .left {
-      border-right:1px solid var(--line);
-      background: rgba(0,0,0,.18);
-    }
+    .content { display:grid; grid-template-columns: 360px 1fr; min-height:600px; }
+    .left, .right { padding:16px; }
+    .left { border-right:1px solid var(--line); background: rgba(0,0,0,.18); }
 
     .panel {
       border:1px solid var(--line);
@@ -92,59 +56,45 @@
       background: rgba(255,255,255,.04);
     }
 
-    .label {
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:8px;
+    .label { font-size:12px; color:var(--muted); margin-bottom:8px; }
+
+    .searchrow { display:flex; gap:10px; align-items:center; }
+
+    .searchinput {
+      flex:1;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.35);
+      color: var(--text);
+      padding: 0 12px;
+      outline: none;
+      font-size: 14px;
     }
+
+    .btn {
+      height: 42px;
+      border-radius: 14px;
+      border: none;
+      padding: 0 14px;
+      cursor: pointer;
+      font-weight: 700;
+      color: rgba(10,12,18,.95);
+      background: linear-gradient(135deg, rgba(110,196,255,.95), rgba(196,110,255,.85));
+    }
+
+    .tiny { margin-top:10px; font-size:12px; color:var(--muted); line-height:1.35; }
 
     @media (max-width: 900px) {
-      .content {
-        grid-template-columns: 1fr;
-      }
-      .left {
-        border-right:none;
-        border-bottom:1px solid var(--line);
-      }
+      .content { grid-template-columns: 1fr; }
+      .left { border-right:none; border-bottom:1px solid var(--line); }
     }
 
-    /* ---------------- GOOGLE CSE FIXES ---------------- */
-
-    /* Prevent popup / overlay behavior */
-    .gsc-results-wrapper-overlay,
-    .gsc-modal-background-image {
-      display:none !important;
-    }
-
-    .gsc-results-wrapper-visible {
-      position: static !important;
-      width: 100% !important;
-      height: auto !important;
-      box-shadow: none !important;
-    }
-
-    /* Dark theme adjustments */
     .gsc-control-cse {
       background: transparent !important;
       border: none !important;
       padding: 0 !important;
       font-family: inherit !important;
-    }
-
-    .gsc-input-box {
-      background: rgba(0,0,0,.35) !important;
-      border-radius: 14px !important;
-      border:1px solid var(--line) !important;
-    }
-
-    input.gsc-input {
-      background: transparent !important;
-      color: var(--text) !important;
-    }
-
-    .gsc-search-button-v2 {
-      border-radius: 14px !important;
-      border:none !important;
     }
 
     .gsc-result {
@@ -155,19 +105,32 @@
       padding:10px !important;
     }
 
-    .gs-title, .gs-title * {
-      color: var(--text) !important;
-      text-decoration:none !important;
-    }
-
-    .gs-snippet {
-      color: var(--muted) !important;
-    }
-
-    .gs-visibleUrl {
-      color:#9fd3ff !important;
-    }
+    .gs-title, .gs-title * { color: var(--text) !important; text-decoration:none !important; }
+    .gs-snippet { color: var(--muted) !important; }
+    .gs-visibleUrl { color:#9fd3ff !important; }
   </style>
+
+  <script>
+    window.__gcse = {
+      callback: function() {
+        const render = () => {
+          if (!google || !google.search || !google.search.cse || !google.search.cse.element) return;
+
+          google.search.cse.element.render({
+            div: "resultsMount",
+            tag: "searchresults-only",
+            attributes: { linkTarget: "_blank" }
+          });
+
+          window.__cseReady = true;
+        };
+
+        try { render(); } catch (e) {}
+      }
+    };
+  </script>
+
+  <script async src="https://cse.google.com/cse.js?cx=c4922d316dfe64190"></script>
 </head>
 
 <body>
@@ -185,16 +148,21 @@
         <aside class="left">
           <div class="panel">
             <div class="label">Google Search</div>
-            <!-- Search box ONLY -->
-            <div class="gcse-searchbox"></div>
+
+            <div class="searchrow">
+              <input id="q" class="searchinput" placeholder="Search Google" autocomplete="off">
+              <button id="go" class="btn" type="button">Search</button>
+            </div>
+
+            <div class="tiny">Shortcut: Ctrl K or Cmd K</div>
+            <div class="tiny" id="status">Ready</div>
           </div>
         </aside>
 
         <main class="right">
           <div class="panel">
             <div class="label">Results</div>
-            <!-- Results ONLY -->
-            <div id="resultsArea" class="gcse-searchresults"></div>
+            <div id="resultsMount"></div>
           </div>
         </main>
       </div>
@@ -202,30 +170,39 @@
   </div>
 
   <script>
-    // Force all result links to open in new tab
-    function forceBlankTargets() {
-      document.querySelectorAll('.gsc-results a').forEach(a => {
-        a.target = '_blank';
-        a.rel = 'noopener';
-      });
+    const q = document.getElementById("q");
+    const go = document.getElementById("go");
+    const statusEl = document.getElementById("status");
+
+    function setStatus(t) { statusEl.textContent = t; }
+
+    function runSearch() {
+      const text = (q.value || "").trim();
+      if (!text) { setStatus("Type something first"); q.focus(); return; }
+
+      if (!window.__cseReady) {
+        setStatus("Search engine not ready yet");
+        return;
+      }
+
+      try {
+        setStatus("Searching");
+        google.search.cse.element.getElement("resultsMount").execute(text);
+      } catch (e) {
+        setStatus("Search failed. Check console for blocked script errors");
+      }
     }
 
-    const observer = new MutationObserver(forceBlankTargets);
-    const wait = setInterval(() => {
-      const r = document.querySelector('.gsc-results');
-      if (r) {
-        observer.observe(r, { childList:true, subtree:true });
-        forceBlankTargets();
-        clearInterval(wait);
-      }
-    }, 250);
+    go.addEventListener("click", runSearch);
+    q.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") runSearch();
+    });
 
-    // Keyboard shortcut Ctrl/Cmd + K
-    document.addEventListener('keydown', e => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+    document.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        const i = document.querySelector('input.gsc-input');
-        if (i) { i.focus(); i.select(); }
+        q.focus();
+        q.select();
       }
     });
   </script>
