@@ -16,9 +16,7 @@
       --muted:rgba(255,255,255,.62);
       --radius:18px;
     }
-
     * { box-sizing: border-box; }
-
     body {
       margin:0;
       min-height:100vh;
@@ -29,12 +27,9 @@
         linear-gradient(180deg, var(--bg0), var(--bg1));
       color: var(--text);
     }
-
     .wrap { max-width: 1200px; margin: 0 auto; padding: 32px 16px; }
-
     .header { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
     .logo { width:44px; height:44px; border-radius:14px; background: linear-gradient(135deg,#6ec4ff,#c46eff); }
-
     h1 { margin:0; font-size:20px; }
     .sub { font-size:13px; color:var(--muted); }
 
@@ -44,23 +39,18 @@
       overflow:hidden;
       background: var(--panel);
     }
-
     .content { display:grid; grid-template-columns: 360px 1fr; min-height:600px; }
     .left, .right { padding:16px; }
     .left { border-right:1px solid var(--line); background: rgba(0,0,0,.18); }
-
     .panel {
       border:1px solid var(--line);
       border-radius:var(--radius);
       padding:12px;
       background: rgba(255,255,255,.04);
     }
-
     .label { font-size:12px; color:var(--muted); margin-bottom:8px; }
-
-    .searchrow { display:flex; gap:10px; align-items:center; }
-
-    .searchinput {
+    .row { display:flex; gap:10px; align-items:center; }
+    .in {
       flex:1;
       height: 42px;
       border-radius: 14px;
@@ -71,7 +61,6 @@
       outline: none;
       font-size: 14px;
     }
-
     .btn {
       height: 42px;
       border-radius: 14px;
@@ -82,7 +71,6 @@
       color: rgba(10,12,18,.95);
       background: linear-gradient(135deg, rgba(110,196,255,.95), rgba(196,110,255,.85));
     }
-
     .tiny { margin-top:10px; font-size:12px; color:var(--muted); line-height:1.35; }
 
     @media (max-width: 900px) {
@@ -90,47 +78,61 @@
       .left { border-right:none; border-bottom:1px solid var(--line); }
     }
 
-    .gsc-control-cse {
-      background: transparent !important;
-      border: none !important;
-      padding: 0 !important;
-      font-family: inherit !important;
-    }
-
-    .gsc-result {
-      background: rgba(255,255,255,.04) !important;
-      border:1px solid var(--line) !important;
-      border-radius:14px !important;
-      margin-bottom:12px !important;
-      padding:10px !important;
-    }
-
+    .gsc-control-cse { background: transparent !important; border: none !important; padding: 0 !important; font-family: inherit !important; }
+    .gsc-result { background: rgba(255,255,255,.04) !important; border:1px solid var(--line) !important; border-radius:14px !important; margin-bottom:12px !important; padding:10px !important; }
     .gs-title, .gs-title * { color: var(--text) !important; text-decoration:none !important; }
     .gs-snippet { color: var(--muted) !important; }
     .gs-visibleUrl { color:#9fd3ff !important; }
   </style>
 
   <script>
-    window.__gcse = {
-      callback: function() {
-        const render = () => {
-          if (!google || !google.search || !google.search.cse || !google.search.cse.element) return;
+    const CX = "c4922d316dfe64190";
+    let cseReady = false;
 
-          google.search.cse.element.render({
-            div: "resultsMount",
-            tag: "searchresults-only",
-            attributes: { linkTarget: "_blank" }
-          });
+    function setStatus(t){ const el = document.getElementById("status"); if(el) el.textContent = t; }
 
-          window.__cseReady = true;
-        };
+    function loadCSE(){
+      setStatus("Loading Google search engine");
+      const s = document.createElement("script");
+      s.async = true;
+      s.src = "https://cse.google.com/cse.js?cx=" + encodeURIComponent(CX);
+      s.onload = () => {
+        setStatus("Google engine loaded");
+        waitForCSE();
+      };
+      s.onerror = () => {
+        setStatus("Google engine blocked. Search will open Google in a new tab");
+      };
+      document.head.appendChild(s);
+    }
 
-        try { render(); } catch (e) {}
-      }
-    };
+    function waitForCSE(){
+      const start = Date.now();
+      const timer = setInterval(() => {
+        if (window.google && google.search && google.search.cse && google.search.cse.element) {
+          clearInterval(timer);
+          cseReady = true;
+          try {
+            google.search.cse.element.render({
+              div: "resultsMount",
+              tag: "searchresults-only",
+              attributes: { linkTarget: "_blank" }
+            });
+            setStatus("Ready");
+          } catch (e) {
+            setStatus("Loaded, but failed to render results area");
+          }
+          return;
+        }
+        if (Date.now() - start > 5000) {
+          clearInterval(timer);
+          setStatus("Google engine did not initialize. Likely blocked by privacy settings or DNS");
+        }
+      }, 100);
+    }
+
+    window.addEventListener("DOMContentLoaded", loadCSE);
   </script>
-
-  <script async src="https://cse.google.com/cse.js?cx=c4922d316dfe64190"></script>
 </head>
 
 <body>
@@ -139,7 +141,7 @@
       <div class="logo"></div>
       <div>
         <h1>SSHomelab Browser</h1>
-        <div class="sub">Search stays on this page · Links open in a new tab</div>
+        <div class="sub">Search stays on this page when possible. Links open in a new tab</div>
       </div>
     </div>
 
@@ -147,15 +149,13 @@
       <div class="content">
         <aside class="left">
           <div class="panel">
-            <div class="label">Google Search</div>
-
-            <div class="searchrow">
-              <input id="q" class="searchinput" placeholder="Search Google" autocomplete="off">
+            <div class="label">Search</div>
+            <div class="row">
+              <input id="q" class="in" placeholder="Search" autocomplete="off">
               <button id="go" class="btn" type="button">Search</button>
             </div>
-
-            <div class="tiny">Shortcut: Ctrl K or Cmd K</div>
-            <div class="tiny" id="status">Ready</div>
+            <div class="tiny" id="status">Starting</div>
+            <div class="tiny">Shortcut: Cmd K or Ctrl K</div>
           </div>
         </aside>
 
@@ -172,33 +172,30 @@
   <script>
     const q = document.getElementById("q");
     const go = document.getElementById("go");
-    const statusEl = document.getElementById("status");
 
-    function setStatus(t) { statusEl.textContent = t; }
+    function openGoogleNewTab(text){
+      window.open("https://www.google.com/search?q=" + encodeURIComponent(text), "_blank", "noopener");
+    }
 
-    function runSearch() {
+    function runSearch(){
       const text = (q.value || "").trim();
-      if (!text) { setStatus("Type something first"); q.focus(); return; }
+      if(!text) { q.focus(); return; }
 
-      if (!window.__cseReady) {
-        setStatus("Search engine not ready yet");
-        return;
-      }
-
-      try {
-        setStatus("Searching");
-        google.search.cse.element.getElement("resultsMount").execute(text);
-      } catch (e) {
-        setStatus("Search failed. Check console for blocked script errors");
+      if (cseReady && window.google && google.search && google.search.cse && google.search.cse.element) {
+        try {
+          google.search.cse.element.getElement("resultsMount").execute(text);
+        } catch (e) {
+          openGoogleNewTab(text);
+        }
+      } else {
+        openGoogleNewTab(text);
       }
     }
 
     go.addEventListener("click", runSearch);
-    q.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") runSearch();
-    });
+    q.addEventListener("keydown", e => { if(e.key === "Enter") runSearch(); });
 
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener("keydown", e => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         q.focus();
