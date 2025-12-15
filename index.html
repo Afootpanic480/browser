@@ -1,211 +1,199 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
   <title>SSHomelab Browser</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <!-- Google Programmable Search -->
   <script async src="https://cse.google.com/cse.js?cx=c4922d316dfe64190"></script>
 
   <style>
-    :root{
+    :root {
       color-scheme: dark;
       --bg0:#07090f;
       --bg1:#0b1020;
+      --panel:rgba(255,255,255,.05);
       --line:rgba(255,255,255,.12);
       --text:rgba(255,255,255,.92);
       --muted:rgba(255,255,255,.62);
-      --shadow: 0 18px 50px rgba(0,0,0,.55);
-      --radius: 18px;
+      --radius:18px;
     }
-    *{box-sizing:border-box}
-    body{
+
+    * { box-sizing: border-box; }
+
+    body {
       margin:0;
       min-height:100vh;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background:
-        radial-gradient(1100px 700px at 18% 12%, rgba(110,196,255,.16), transparent 55%),
-        radial-gradient(900px 600px at 82% 18%, rgba(196,110,255,.14), transparent 55%),
-        radial-gradient(1000px 700px at 50% 90%, rgba(110,255,196,.10), transparent 60%),
+        radial-gradient(900px 600px at 20% 10%, rgba(110,196,255,.16), transparent 60%),
+        radial-gradient(900px 600px at 80% 10%, rgba(196,110,255,.14), transparent 60%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
+      color: var(--text);
     }
-    .wrap{max-width:1100px; margin:0 auto; padding:38px 16px 26px;}
-    .top{
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 16px;
+    }
+
+    .header {
       display:flex;
       align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:18px;
-    }
-    .brand{display:flex; align-items:center; gap:12px; user-select:none;}
-    .logo{
-      width:44px; height:44px; border-radius:14px;
-      background:
-        radial-gradient(12px 12px at 30% 30%, rgba(255,255,255,.55), transparent 55%),
-        linear-gradient(135deg, rgba(110,196,255,.95), rgba(196,110,255,.85));
-      box-shadow: 0 10px 26px rgba(0,0,0,.45);
-    }
-    h1{margin:0; font-size:18px; letter-spacing:.2px; line-height:1.1;}
-    .sub{margin:3px 0 0; font-size:12px; color:var(--muted);}
-
-    .shell{
-      border-radius: calc(var(--radius) + 8px);
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
-      box-shadow: var(--shadow);
-      overflow:hidden;
+      gap:14px;
+      margin-bottom:20px;
     }
 
-    .head{
-      padding: 16px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-    }
-    .headline{margin:0; font-size:22px; font-weight:750;}
-    .note{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.35;}
-
-    .rightbox{
-      text-align:right;
-      padding:10px 12px;
+    .logo {
+      width:44px;
+      height:44px;
       border-radius:14px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.04);
+      background: linear-gradient(135deg,#6ec4ff,#c46eff);
     }
-    .t{font-size:15px; font-weight:700;}
-    .d{margin-top:2px; font-size:12px; color:var(--muted);}
 
-    .content{
+    h1 {
+      margin:0;
+      font-size:20px;
+    }
+
+    .sub {
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .shell {
+      border:1px solid var(--line);
+      border-radius: calc(var(--radius) + 6px);
+      overflow:hidden;
+      background: var(--panel);
+    }
+
+    .content {
       display:grid;
       grid-template-columns: 360px 1fr;
-      gap:0;
-      min-height: 560px;
+      min-height:600px;
     }
-    .side{
-      padding:14px;
-      border-right: 1px solid rgba(255,255,255,.08);
+
+    .left, .right {
+      padding:16px;
+    }
+
+    .left {
+      border-right:1px solid var(--line);
       background: rgba(0,0,0,.18);
     }
-    .main{
-      padding:14px;
-      background: rgba(0,0,0,.10);
+
+    .panel {
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:12px;
+      background: rgba(255,255,255,.04);
     }
 
-    .panel{
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.045);
-      border-radius: var(--radius);
-      padding: 12px;
-    }
-    .label{
+    .label {
       font-size:12px;
-      color: rgba(255,255,255,.72);
-      margin: 0 0 8px;
-      letter-spacing:.2px;
-    }
-    .tiny{
-      margin:10px 0 0;
-      font-size:12px;
-      color: var(--muted);
-      line-height:1.35;
+      color:var(--muted);
+      margin-bottom:8px;
     }
 
-    @media (max-width: 920px){
-      .content{grid-template-columns: 1fr;}
-      .side{border-right:none; border-bottom: 1px solid rgba(255,255,255,.08);}
-      .rightbox{display:none;}
+    @media (max-width: 900px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+      .left {
+        border-right:none;
+        border-bottom:1px solid var(--line);
+      }
     }
 
-    /* Google search UI styling */
-    .gsc-control-cse{
+    /* ---------------- GOOGLE CSE FIXES ---------------- */
+
+    /* Prevent popup / overlay behavior */
+    .gsc-results-wrapper-overlay,
+    .gsc-modal-background-image {
+      display:none !important;
+    }
+
+    .gsc-results-wrapper-visible {
+      position: static !important;
+      width: 100% !important;
+      height: auto !important;
+      box-shadow: none !important;
+    }
+
+    /* Dark theme adjustments */
+    .gsc-control-cse {
       background: transparent !important;
       border: none !important;
       padding: 0 !important;
-      color: var(--text) !important;
       font-family: inherit !important;
     }
-    .gsc-search-box{margin: 0 !important;}
-    .gsc-input-box{
+
+    .gsc-input-box {
+      background: rgba(0,0,0,.35) !important;
       border-radius: 14px !important;
-      border: 1px solid rgba(255,255,255,.14) !important;
-      background: rgba(0,0,0,.25) !important;
+      border:1px solid var(--line) !important;
     }
-    input.gsc-input{
+
+    input.gsc-input {
       background: transparent !important;
       color: var(--text) !important;
-      font-size: 14px !important;
     }
-    .gsc-search-button-v2{
+
+    .gsc-search-button-v2 {
       border-radius: 14px !important;
-      border: none !important;
-      padding: 10px 12px !important;
+      border:none !important;
     }
-    .gsc-results .gsc-cursor-box .gsc-cursor-page{
-      color: rgba(255,255,255,.75) !important;
-    }
-    .gsc-result{
-      border-radius: 16px !important;
-      border: 1px solid rgba(255,255,255,.10) !important;
+
+    .gsc-result {
       background: rgba(255,255,255,.04) !important;
-      padding: 10px !important;
-      margin-bottom: 10px !important;
+      border:1px solid var(--line) !important;
+      border-radius:14px !important;
+      margin-bottom:12px !important;
+      padding:10px !important;
     }
-    .gs-title, .gs-title *{
-      color: rgba(255,255,255,.92) !important;
-      text-decoration: none !important;
+
+    .gs-title, .gs-title * {
+      color: var(--text) !important;
+      text-decoration:none !important;
     }
-    .gs-snippet{color: rgba(255,255,255,.68) !important;}
-    .gs-visibleUrl{color: rgba(180,220,255,.85) !important;}
+
+    .gs-snippet {
+      color: var(--muted) !important;
+    }
+
+    .gs-visibleUrl {
+      color:#9fd3ff !important;
+    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <div class="top">
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <h1>SSHomelab Browser</h1>
-          <div class="sub">Search stays on this page, links open in a new tab</div>
-        </div>
-      </div>
-
-      <div class="rightbox" aria-label="Clock">
-        <div class="t" id="time">--:--</div>
-        <div class="d" id="date">----</div>
+    <div class="header">
+      <div class="logo"></div>
+      <div>
+        <h1>SSHomelab Browser</h1>
+        <div class="sub">Search stays on this page · Links open in a new tab</div>
       </div>
     </div>
 
     <div class="shell">
-      <div class="head">
-        <div>
-          <p class="headline">Search</p>
-          <p class="note">Type your search on the left. Results show on the right. Clicking a result opens it in a new tab.</p>
-        </div>
-      </div>
-
       <div class="content">
-        <aside class="side">
+        <aside class="left">
           <div class="panel">
-            <p class="label">Google Search</p>
-
-            <!-- Search box only -->
-            <div class="gcse-searchbox" data-enableHistory="true"></div>
-
-            <p class="tiny">
-              Shortcut: Ctrl K or Cmd K to jump to the search bar.
-            </p>
+            <div class="label">Google Search</div>
+            <!-- Search box ONLY -->
+            <div class="gcse-searchbox"></div>
           </div>
         </aside>
 
-        <main class="main">
+        <main class="right">
           <div class="panel">
-            <p class="label">Results</p>
-
-            <!-- Results only -->
+            <div class="label">Results</div>
+            <!-- Results ONLY -->
             <div id="resultsArea" class="gcse-searchresults"></div>
           </div>
         </main>
@@ -214,44 +202,30 @@
   </div>
 
   <script>
-    function updateClock(){
-      const now = new Date();
-      const time = new Intl.DateTimeFormat(undefined, { hour: "2-digit", minute: "2-digit" }).format(now);
-      const date = new Intl.DateTimeFormat(undefined, { weekday: "short", month: "short", day: "numeric" }).format(now);
-      document.getElementById("time").textContent = time;
-      document.getElementById("date").textContent = date;
-    }
-    updateClock();
-    setInterval(updateClock, 20000);
-
-    function forceBlankTargets(){
-      const root = document.getElementById("resultsArea");
-      if(!root) return;
-      const links = root.querySelectorAll("a");
-      links.forEach(a => {
-        a.setAttribute("target", "_blank");
-        a.setAttribute("rel", "noopener");
+    // Force all result links to open in new tab
+    function forceBlankTargets() {
+      document.querySelectorAll('.gsc-results a').forEach(a => {
+        a.target = '_blank';
+        a.rel = 'noopener';
       });
     }
 
-    const observer = new MutationObserver(() => forceBlankTargets());
-
-    const waitForResults = setInterval(() => {
-      const root = document.getElementById("resultsArea");
-      if(root){
-        observer.observe(root, { childList: true, subtree: true });
+    const observer = new MutationObserver(forceBlankTargets);
+    const wait = setInterval(() => {
+      const r = document.querySelector('.gsc-results');
+      if (r) {
+        observer.observe(r, { childList:true, subtree:true });
         forceBlankTargets();
-        clearInterval(waitForResults);
+        clearInterval(wait);
       }
     }, 250);
 
-    document.addEventListener("keydown", (e) => {
-      const k = e.key.toLowerCase();
-      const cmdk = (e.metaKey || e.ctrlKey) && k === "k";
-      if(cmdk){
+    // Keyboard shortcut Ctrl/Cmd + K
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        const input = document.querySelector("input.gsc-input");
-        if(input){ input.focus(); input.select(); }
+        const i = document.querySelector('input.gsc-input');
+        if (i) { i.focus(); i.select(); }
       }
     });
   </script>
